@@ -2,11 +2,11 @@
 	<body>
 		<textarea style="width: 500px" id="enterArea"></textarea>
 		<br>
-		<textarea style="width: 500px;height: 800px" id="fonemsInfoArea"></textarea>
-		<textarea style="width: 500px;height: 800px" id="wordsInfoArea"></textarea>
+		<textarea style="width: 500px;height: 800px" id="fonemsDescriptionArea"></textarea>
+		<textarea style="width: 500px;height: 800px" id="wordsDescriptionArea"></textarea>
 		<script>
 var tabSym="\t"
-var fonemaFlags=`
+var fonemsFlags=`
 сг
 	сп  способ
 		шм  шумные
@@ -149,7 +149,7 @@ return
 	мягкие_fonemos  -мг
 	твердые_fonemos -тв
 `
-var morphemaFlags=`
+var wordsFlags=`
 g	gender
 	=0  cant have gender
 	=u  undefined
@@ -524,7 +524,7 @@ return
     							}
     					fonemsResult+="\n"
 					}
-					fonemsInfoArea.value=fonemsResult
+					fonemsDescriptionArea.value=fonemsResult
 				}
 				{
 				    var enteredWords=enterArea.value.split(/\s+/)
@@ -542,7 +542,7 @@ return
     							}
     					wordsResult+="\n"
 					}
-					wordsInfoArea.value=wordsResult
+					wordsDescriptionArea.value=wordsResult
 				}
 			}
 		</script>
