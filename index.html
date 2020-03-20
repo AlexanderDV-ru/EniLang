@@ -1,0 +1,312 @@
+<html>
+	<body>
+		<input id="testField">
+		<script>
+var tabSym="\t"
+var wordsInfo=`
+spitxoparto
+	+non+   noun
+	+pronon+	pronoun
+	+verb+  verb
+	+adj+   adjective
+	+adv+   adverb
+	+partisipl+ participle
+	+kunig+ union
+	+er+	particle
+vortoparto
+	+prevort+	prefix
+	+postvod+   postfix
+misc
+	+fon+   sound
+	+vid+   video
+	+aud+   audio
+	+dom+   house
+	+hejm+   home
+	+vort+  word
+	+temp+  time
+	+spak+  space
+	+vorld+ world
+	+part+  part
+	+nombr+ number
+	+fe+	female
+	+me+	male
+fudo
+	+fud+   food
+	+vod+   water
+	+kuk+   cake
+	+pom+   apple
+	+pIr+   pear
+	+banan+ banana
+	+brasik+	cabbage
+	+legom+ vegetable
+	+tomat+ tomato
+	+potat+ potato
+	+karot+ carrot
+	+orang+ orange
+polo
+	+gud+   good
+	+bun+   boon
+	+hot+   hot
+	+vard+  forward
+	+var+   war
+interjeko
+	+hay+   hello
+	+pay+   hello if you just seen anybody but dont want to speak
+	+bay+   bye
+ad_non
+	polo
+	+pol+   polaris
+verb_non
+	+vork+  work
+	+vis+   look/see
+verb_ad_non
+	+kolor+ color
+	+paint+ paint
+kunigo
+	+en+	and
+	+an+	and/but
+	+at+	but
+ero
+	+un+	un
+	+nE+	not
+	+zE+	the
+	+lE+	do ... ?
+	+from+  from
+	+of+	of
+	+viv+   with
+	+in+	in
+	+on+	on
+	+at+	at
+besto
+	+kat+   cat
+	+can+   dog
+	+hom+   human
+	+best+  animal
+	+ran+   frog
+	+vac+   cow
+	+hors+  horse
+	+kok+   chicken
+	+pork+  pig
+gen
+	besto
+	+kid+   kid
+	+adult+ adult
+	+sen+   old
+fe+
+	gen
+me+
+	gen
+gen2
+	gen
+	fe+ female
+	me+ male
+transporto
+	+aut+   car
+	+avi+   plane
+	+helikopter+	helicopter
+	+multikopter+   multicopter
+	+kopter+	helicopter/multicopter
+	+kvadrokopter+  quadrocopter
+	+transport+ transport
+	+veturilo+ vehicle
+	+train+ train
+	+bus+   bus
+	+tram+  tram
+non
+	gen2
+	spitxparto
+	vortoparto
+	transporto
+	misc
+	fudo
+nono
+	non
+	ad_non
+	verb_non
+	verb_ad_non
+pronono
+	+m+ i
+	+v+ you
+	+l+ he/she/it
+	+fem+ i female
+	+fev+ you female
+	+fel+ he/she/it female
+	+mem+ i male
+	+mev+ you male
+	+mel+ he/she/it male
++O
+	pronono
+verb
+	+s+ is
+	+hav+   have
+	+am+	love
+	+sat+   like
+	+vol+   want
+	+don+   give
+	+flug+  fly
+	+far+   make
+	+wait+  wait
+verbo
+	verb
+	verb_non
+	verb_ad_non
++I
+	verbo
++r
+	+I
++d
+	+I
++l
+	+I
+verbo_tense
+	+d
+	+I
+	+l
++n
+	verbo_tense
+verbos
+	verbo_tense
+	+n
++o
+	nono
+	+r
+un+
+	+o
+	un+  un
++s
+	+o
+	+O
+nombro
+	+z+ zero
+	+x+ one
+	+b+ two
+	+n+ three
+	+w+ four
+	+y+ five
+	+r+ six
+	+t+ seven
+	+p+ eight
+	+g+ nine
+	+j+ ten
+	+s+ eleven
+koloro
+	+rug+   red
+	+orang+ orange
+	+flav+  yellow
+	+brun+  brown
+	+verd+  green
+	+blu+   blue
+	+blank+ white
+	+noir+  black
+	+purpur+	purple
+	+roz+   pink
+ad
+	koloro
+	+rapid+ fast
+	+h+ funny
+	ad_non
+	verb_ad_non
+	nombro
+	+k+ this
++a
+	pronono
+	ad  adj
++e
+	ad  adv
+nonos_prononos
+	+o
+	+O
+	+s  many
+advos
+	+e
+adjos
+	+a
+interjekos
+	interjeko
+kunigos
+	kunigo
+eros
+	ero
+serviso_vortos
+	kunigos
+	eros
+main_vortos
+	nonos_prononos
+	verbos
+	advos
+	adjos
+vortos
+	serviso_vortos
+	main_vortos
+	interjekos
+`
+			var toJSON=function(text)
+			{
+				var json={}
+				var last
+				for(var v in text.split("\n"))
+				{
+					if(!text.split("\n")[v].startsWith(tabSym))
+						json[last=text.split("\n")[v]]=""
+					else if(last)
+						if(!json[last])
+							json[last]=text.split("\n")[v].substr(1)
+						else json[last]+="\n"+text.split("\n")[v].substr(1)
+				}
+				for(var v in json)
+					if(json[v].split("\n").length>1)
+					{
+						json[v]=toJSON(json[v])
+					}
+					else
+					{
+						var vv=json[v]
+						json[v]={}
+						json[v][vv]={}
+					}
+				return json
+			}
+			var ress
+			var onChange=function()
+			{
+				var json=toJSON(wordsInfo.replace("	","\t"))
+				for(var v in json)
+					for(var v2 in json[v])
+					{
+							console.log(v2)
+							console.log(v2.split(/\s+/))
+						var vv=v2.split(/\s+/)
+						if(vv[0].startsWith("+")&&vv[0].endsWith("+"))
+						{
+							json[v][v2]=json[v][v2]
+						}
+						else
+						{
+							for(var v3 in json[vv[0]])
+								json[v]["+"+(vv[0].endsWith("+")&&!vv[0].startsWith("+")?vv[0].replace("+","").replace("+",""):"")+v3.split(/\s+/)[0].replace("+","").replace("+","")+(vv[0].startsWith("+")&&!vv[0].endsWith("+")?vv[0].replace("+","").replace("+",""):"")+"+"+"\t"+(vv[0].endsWith("+")&&!vv[0].startsWith("+")&&vv[1]?v2.replace(vv[0],"").replace("+","").replace("+","")+" ":"")+(v3.split(/\s+/)[1]?v3.replace(v3.split(/\s+/)[0],""):"")+(vv[0].startsWith("+")&&!vv[0].endsWith("+")&&vv[1]?" "+v2.replace(vv[0],"").replace("+","").replace("+",""):"")]={}
+							delete json[v][v2]
+						}
+					}
+				byElements.value=JSON.stringify(json["vortos"]).replace(",","\n")	
+				
+				ress=json
+				return json
+			}
+			console.log(toJSON(wordsInfo))
+			console.log(onChange()["vortos"])
+			var onTest=function()
+			{
+				var test=testField.value
+				var res=""
+				for(var v in test.split(" "))
+					for(var v2 in ress["vortos"])
+						if(v2.startsWith("+"+test.split(" ")[v]+"+"))
+							res+="("+v2.replace(v2.split(/\s/)[0],"")+") "
+				for(var v=0;v<20;v++)
+				res=res.replace(/\s\s+/," ")
+				 console.log(res)
+			}
+			testField.oninput=onTest
+		</script>
+	</body>
+</html>
