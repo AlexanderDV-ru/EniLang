@@ -1,175 +1,377 @@
 <html>
 	<body>
-		<input id="testField">
+		<textarea style="width: 500px" id="enterArea"></textarea>
+		<br>
+		<textarea style="width: 500px;height: 800px" id="fonemsInfoArea"></textarea>
+		<textarea style="width: 500px;height: 800px" id="wordsInfoArea"></textarea>
 		<script>
 var tabSym="\t"
-var wordsInfo=`
-spitxoparto
-	+non+   noun
-	+pronon+	pronoun
-	+verb+  verb
-	+adj+   adjective
-	+adv+   adverb
-	+partisipl+ participle
-	+kunig+ union
-	+er+	particle
-vortoparto
-	+prevort+	prefix
-	+postvod+   postfix
-misc
-	+fon+   sound
-	+vid+   video
-	+aud+   audio
-	+dom+   house
-	+hejm+   home
-	+vort+  word
-	+temp+  time
-	+spak+  space
-	+vorld+ world
-	+part+  part
-	+nombr+ number
-	+fe+	female
-	+me+	male
+var fonemaFlags=`
+сг
+	сп  способ
+		шм  шумные
+			см  смычной
+			фр  фрикативный
+			дж  дрожащие
+				му  многоударные
+		сн  сонанты
+			дж  дрожащие
+				му  многоударные
+				оу  одноударные
+			нс  носовые
+			ап  аппроксиманты
+				бк  боковые
+				ск  скользящие
+		щл  щелкающие
+	гл  глухость
+		=зв  звонкие
+		=гх  глухие
+	мт  место
+		=гб  губные
+		=гб.гб  губно-губные
+		=гб.зб  губно-зубные
+		=бк  боковые
+		=пя  переднеязычные
+		=пя.зб  зубные
+		=пя.ал  альвеолярные
+		=пя.па  постальвеолярные
+		=пя.па.ла  палатоальвеолярные
+		=пя.па.рф  ретрофлексные
+		=пя.па.ап  альвеопалатальные
+		=пл палатальные
+		=пл.ч   чистые
+		=пл.л   лабио
+		=вл  велярные
+		=вл.ч   чистые
+		=вл.л   лабио
+		=ув  увулярные
+		=лг  ларингалы
+		=лг.фг  фарингальные
+		=лг.эг  эпиглоттальные
+		=лг.гт  глоттальные
+гл
+	вс  высота
+		=вх  Верхние	
+		=вх.нн  Ненапряжённые
+		=вх.ср  Средне
+		=ср  Средние
+		=нж  Нижние	
+		=нж.нн  Ненапряжённые
+		=нж.ср  Средне
+	дл  долгота	
+		=пр  Передние
+		=пр.нн  Ненапряжённые 
+		=сд  Средние
+		=зд  Задние	
+		=зд.нн  Ненапряжённые 
+	ол  огубленность
+		=нг  неогубленные
+		=ог  огубленные
+`
+var fonemsConfig=`
+мягкие_шумные_смычные
+	+P/П+	   -гх -мс=гб
+	+B/Б+	   -зв -мс=гб
+	+T/Т+	   -гх -мс=пя
+	+D/Д+	   -зв -мс=пя
+	+K/К+	   -гх -мс=вл
+	+G/Г+	   -зв -мс=вл
+мягкие_шумные_фрикативные
+	+F/Ф+	   -гх -мс=гб
+	+V/В+	   -зв -мс=гб
+	+S/С+	   -гх -мс=пя.ал
+	+Z/З+	   -зв -мс=пя.ал  
+	+X/Ш+	   -гх -мс=пя.па.па
+	+J/Ж+	   -зв -мс=пя.па.па  
+	+H/Х+	   -гх -мс=вл
+	+Q/Ъ+	   -зв -мс=вл
+мягкие_скользящие
+	+Y/Й+
+	+W/Я+
+мягкие_сонанты
+	+M/М+   -сп=нс	-мс=гб
+	+N/Н+   -сп=нс	-мс=пя.ал 
+	+L/Л+   -сп=бк	-мс=пя.ал	
+	+R/Р+   -сп=др	-мс=пя.ал   
+	мягкие_скользящие  -сп=ск
+мягкие_согласные
+	мягкие_шумные_смычные   -сп=шм.см
+	мягкие_шумные_фрикативные   -сп=шм.фр
+	мягкие_сонанты   -сп=сн
+мягкие_гласные
+	+A/А+
+	+O/О+
+	+E/Э+
+	+I/Ы+	 -1
+	+U/У+	 -2
+мягкие_fonemos
+	мягкие_согласные   -сг
+	мягкие_гласные	 -гл
+твердые_шумные_смычные
+	+p/п+	   -гх -мс=гб
+	+b/б+	   -зв -мс=гб
+	+t/т+	   -гх -мс=пя
+	+d/д+	   -зв -мс=пя
+	+k/к+	   -гх -мс=вл
+	+g/г+	   -зв -мс=вл
+твердые_шумные_фрикативные
+	+f/ф+	   -гх -мс=гб
+	+v/в+	   -зв -мс=гб
+	+s/с+	   -гх -мс=пя.ал
+	+z/з+	   -зв -мс=пя.ал  
+	+x/ш+	   -гх -мс=пя.па.па
+	+j/ж+	   -зв -мс=пя.па.па  
+	+h/х+	   -гх -мс=вл
+	+q/ъ+	   -зв -мс=вл
+твердые_скользящие
+	+y/й+
+	+w/я+
+твердые_сонанты
+	+m/м+   -сп=нс	-мс=гб
+	+n/н+   -сп=нс	-мс=пя.ал 
+	+l/л+   -сп=бк	-мс=пя.ал	
+	+r/р+   -сп=др	-мс=пя.ал   
+	твердые_скользящие  -сп=ск
+твердые_согласные
+	твердые_шумные_смычные   -сп=шм.см
+	твердые_шумные_фрикативные   -сп=шм.фр
+	твердые_сонанты   -сп=сн
+твердые_гласные
+	+a/а+
+	+o/о+
+	+e/э+
+	+i/ы+	 -1
+	+u/у+	 -2
+твердые_fonemos
+	твердые_согласные   -сг
+	твердые_гласные	 -гл
+return
+	мягкие_fonemos  -мг
+	твердые_fonemos -тв
+`
+var morphemaFlags=`
+g	gender
+	=0  cant have gender
+	=u  undefined
+	=f  female
+	=m  male
+n   number
+	=0  cant have number
+	=u  undefined
+	=s  single
+	=m  multi
+t	tense
+	=0  cant have tense
+	=u  undefined
+	=p  past
+	=n  present
+	=f  future
+s   stage
+	=0  cant have stage
+	=u  undefined
+	=p  perfect
+	=c  continuos
+tr  translate
+sp  part of speech
+	t	type
+`
+var wordsConfig=`
+spitxparto
+	+non+	-tr=noun
+	+pronon+	-tr=pronoun
+	+verb+  -tr=verb
+	+adj+	-tr=adjective
+	+adv+	-tr=adverb
+	+partisipl+ -tr=participle
+	+kunig+ -tr=union
+	+er+	-tr=particle
+vortparto
+	+prevort+	-tr=prefix
+	+postvort+	-tr=postfix
+lingo
+    +fonem+ -tr=phonem
+    +morphem+   -tr=morphem
+mIsko
+	+nom+	-tr=name
+	+fon+	-tr=sound
+	+vid+	-tr=video
+	+aud+	-tr=audio
+	+dom+	-tr=house
+	+hejm+	-tr=home
+	+vort+  -tr=word
+	+temp+  -tr=time
+	+spak+  -tr=space
+	+vorld+ -tr=world
+	+part+  -tr=part
+	+nombr+ -tr=number
 fudo
-	+fud+   food
-	+vod+   water
-	+kuk+   cake
-	+pom+   apple
-	+pIr+   pear
-	+banan+ banana
-	+brasik+	cabbage
-	+legom+ vegetable
-	+tomat+ tomato
-	+potat+ potato
-	+karot+ carrot
-	+orang+ orange
+	+fud+	-tr=food
+	+vod+	-tr=water
+	+kuk+	-tr=cake
+	+pom+	-tr=apple
+	+pIr+	-tr=pear
+	+banan+ -tr=banana
+	+brasik+	-tr=cabbage
+	+legom+ -tr=vegetable
+	+tomat+ -tr=tomato
+	+potat+ -tr=potato
+	+karot+ -tr=carrot
+	+orang+ -tr=orange
 polo
-	+gud+   good
-	+bun+   boon
-	+hot+   hot
-	+vard+  forward
-	+var+   war
+	+gud+	-tr=good
+	+bun+	-tr=boon
+	+hot+	-tr=hot
+	+vard+  -tr=forward
+	+var+	-tr=war
 interjeko
-	+hay+   hello
-	+pay+   hello if you just seen anybody but dont want to speak
-	+bay+   bye
+	+hay+	-tr=hello
+	+pay+	-tr=hello if you just seen anybody but dont want to speak
+	+bay+	-tr=bye
 ad_non
 	polo
-	+pol+   polaris
+	+pol+	-tr=polaris
+	+fe+	-tr=female
+	+me+	-tr=male
 verb_non
-	+vork+  work
-	+vis+   look/see
+	+vork+  -tr=work
+	+vis+	-tr=look/see
 verb_ad_non
-	+kolor+ color
-	+paint+ paint
+	+kolor+ -tr=color
+	+paint+ -tr=paint
 kunigo
-	+en+	and
-	+an+	and/but
-	+at+	but
+	+en+	-tr=and
+	+an+	-tr=and/but
+	+at+	-tr=but
 ero
-	+un+	un
-	+nE+	not
-	+zE+	the
-	+lE+	do ... ?
-	+from+  from
-	+of+	of
-	+viv+   with
-	+in+	in
-	+on+	on
-	+at+	at
+	+un+	-tr=un
+	+nE+	-tr=not
+	+zE+	-tr=the
+	+lE+	-tr=do ... ?
+	+from+  -tr=from
+	+of+	-tr=of
+	+viv+	-tr=with
+	+in+	-tr=in
+	+on+	-tr=on
+	+at+	-tr=at
 besto
-	+kat+   cat
-	+can+   dog
-	+hom+   human
-	+best+  animal
-	+ran+   frog
-	+vac+   cow
-	+hors+  horse
-	+kok+   chicken
-	+pork+  pig
+	+kat+	-tr=cat
+	+can+	-tr=dog
+	+hom+	-tr=human
+	+best+  -tr=animal
+	+ran+	-tr=frog
+	+vac+	-tr=cow
+	+hors+  -tr=horse
+	+kok+	-tr=chicken
+	+pork+  -tr=pig
 gen
-	besto
-	+kid+   kid
-	+adult+ adult
-	+sen+   old
+	besto	-besto
+	+kid+	-tr=kid
+	+adult+ -tr=adult
+	+sen+	-tr=old
 fe+
 	gen
 me+
 	gen
 gen2
-	gen
-	fe+ female
-	me+ male
+	gen -g=u
+	fe+ -g=f
+	me+ -g=m
 transporto
-	+aut+   car
-	+avi+   plane
-	+helikopter+	helicopter
-	+multikopter+   multicopter
-	+kopter+	helicopter/multicopter
-	+kvadrokopter+  quadrocopter
-	+transport+ transport
-	+veturilo+ vehicle
-	+train+ train
-	+bus+   bus
-	+tram+  tram
+	+aut+	-tr=car
+	+avi+	-tr=plane
+	+helikopter+	-tr=helicopter
+	+multikopter+	-tr=multicopter
+	+kopter+	-tr=helicopter/multicopter
+	+kvadrokopter+  -tr=quadrocopter
+	+transport+ -tr=transport
+	+veturilo+ -tr=vehicle
+	+train+ -tr=train
+	+bus+	-tr=bus
+	+tram+  -tr=tram
+negen
+	spitxparto  -spitxparto
+	vortparto  -vortparto
+	transporto  -transporto
+	mIsko	-mIsko
+	fudo	-fudo
+	lingo   -lingo
 non
 	gen2
-	spitxparto
-	vortoparto
-	transporto
-	misc
-	fudo
+	negen	-g=0
 nono
 	non
 	ad_non
 	verb_non
 	verb_ad_non
+questions
+	+ki+	-tr=anyquestion
 pronono
-	+m+ i
-	+v+ you
-	+l+ he/she/it
-	+fem+ i female
-	+fev+ you female
-	+fel+ he/she/it female
-	+mem+ i male
-	+mev+ you male
-	+mel+ he/she/it male
+	+m+ -tr=i -g=u  -face=1
+	+v+ -tr=you -g=u  -face=2
+	+l+ -tr=it -g=u  -face=3
+	+fem+ -tr=i -g=f  -face=1
+	+fev+ -tr=you -g=f  -face=2
+	+fel+ -tr=it -g=f  -face=3
+	+mem+ -tr=i -g=m  -face=1
+	+mev+ -tr=you -g=m  -face=2
+	+mel+ -tr=it -g=m  -face=3
 +O
 	pronono
+modal
+	+d+ -tr=do
+	+c+ -tr=can
+	+v+ -tr=would
+	+x+ -tr=should
+	+m+ -tr=must
+	+y+ -tr=may
+	+l+ -tr=shall
 verb
-	+s+ is
-	+hav+   have
-	+am+	love
-	+sat+   like
-	+vol+   want
-	+don+   give
-	+flug+  fly
-	+far+   make
-	+wait+  wait
+	+s+ -tr=is
+	+hav+	-tr=have
+	+am+	-tr=love
+	+sat+	-tr=like
+	+vol+	-tr=want
+	+don+	-tr=give
+	+flug+  -tr=fly
+	+far+	-tr=make
+	+wait+  -tr=wait
+	+sent+  -tr=feel
+	modal   -modal
 verbo
 	verb
 	verb_non
 	verb_ad_non
 +I
 	verbo
-+r
-	+I
 +d
+	+I
++m
 	+I
 +l
 	+I
 verbo_tense
-	+d
-	+I
-	+l
+	+I  -t=u
+	+d  -t=p
+	+m  -t=n
+	+l  -t=f
 +n
 	verbo_tense
-verbos
++z
 	verbo_tense
-	+n
+verbo_stage
+	verbo_tense -s=u
+	+n  -s=c
+	+z  -s=p
+verbos
+	verbo_stage
++r
+	+I
++v
+	+I
 +o
 	nono
-	+r
+	+r  -maker  -fromverb
+	+v  -making  -fromverb
 un+
 	+o
 	un+  un
@@ -177,46 +379,46 @@ un+
 	+o
 	+O
 nombro
-	+z+ zero
-	+x+ one
-	+b+ two
-	+n+ three
-	+w+ four
-	+y+ five
-	+r+ six
-	+t+ seven
-	+p+ eight
-	+g+ nine
-	+j+ ten
-	+s+ eleven
+	+z+ -tr=zero
+	+x+ -tr=one
+	+b+ -tr=two-tr=
+	+n+ -tr=three
+	+w+ -tr=four
+	+y+ -tr=five
+	+r+ -tr=six
+	+t+ -tr=seven
+	+p+ -tr=eight
+	+g+ -tr=nine
+	+j+ -tr=ten
+	+s+ -tr=eleven
 koloro
-	+rug+   red
-	+orang+ orange
-	+flav+  yellow
-	+brun+  brown
-	+verd+  green
-	+blu+   blue
-	+blank+ white
-	+noir+  black
-	+purpur+	purple
-	+roz+   pink
+	+rug+	-tr=red
+	+orang+ -tr=orange
+	+flav+  -tr=yellow
+	+brun+  -tr=brown
+	+verd+  -tr=green
+	+blu+	-tr=blue
+	+blank+ -tr=white
+	+noir+  -tr=black
+	+purpur+	-tr=purple
+	+roz+	-tr=pink
 ad
 	koloro
-	+rapid+ fast
-	+h+ funny
+	+rapid+ -tr=fast
+	+h+ -tr=funny
 	ad_non
 	verb_ad_non
 	nombro
-	+k+ this
+	+k+ -tr=this
 +a
 	pronono
-	ad  adj
+	ad  -tr=adj
 +e
-	ad  adv
+	ad  -tr=adv
 nonos_prononos
-	+o
-	+O
-	+s  many
+	+o  -n=s
+	+O  -n=s
+	+s  -n=m -tr=many
 advos
 	+e
 adjos
@@ -227,18 +429,22 @@ kunigos
 	kunigo
 eros
 	ero
-serviso_vortos
-	kunigos
-	eros
-main_vortos
-	nonos_prononos
-	verbos
-	advos
-	adjos
+servisa_vortos
+	kunigos -sp=kunigo
+	eros -sp=ero
+kefa_vortos
+	nonos_prononos -sp=nono
+	verbos -sp=verbo
+	advos -sp=advo
+	adjos -sp=adjo
 vortos
-	serviso_vortos
-	main_vortos
-	interjekos
+	servisa_vortos  -sp.t=servisa
+	kefa_vortos -sp.t=kefa
+	interjekos -sp=interjeko
+	propaj_vortos -sp=propaj
+	questions   -__temp
+return
+	vortos
 `
 			var toJSON=function(text)
 			{
@@ -267,14 +473,11 @@ vortos
 				return json
 			}
 			var ress
-			var onChange=function()
+			var onChange=function(json)
 			{
-				var json=toJSON(wordsInfo.replace("	","\t"))
 				for(var v in json)
 					for(var v2 in json[v])
 					{
-							console.log(v2)
-							console.log(v2.split(/\s+/))
 						var vv=v2.split(/\s+/)
 						if(vv[0].startsWith("+")&&vv[0].endsWith("+"))
 						{
@@ -283,30 +486,65 @@ vortos
 						else
 						{
 							for(var v3 in json[vv[0]])
-								json[v]["+"+(vv[0].endsWith("+")&&!vv[0].startsWith("+")?vv[0].replace("+","").replace("+",""):"")+v3.split(/\s+/)[0].replace("+","").replace("+","")+(vv[0].startsWith("+")&&!vv[0].endsWith("+")?vv[0].replace("+","").replace("+",""):"")+"+"+"\t"+(vv[0].endsWith("+")&&!vv[0].startsWith("+")&&vv[1]?v2.replace(vv[0],"").replace("+","").replace("+","")+" ":"")+(v3.split(/\s+/)[1]?v3.replace(v3.split(/\s+/)[0],""):"")+(vv[0].startsWith("+")&&!vv[0].endsWith("+")&&vv[1]?" "+v2.replace(vv[0],"").replace("+","").replace("+",""):"")]={}
+								json[v]["+"+(vv[0].endsWith("+")&&!vv[0].startsWith("+")?vv[0].replace("+","").replace("+",""):"")+v3.split(/\s+/)[0].replace("+","").replace("+","")+(vv[0].startsWith("+")&&!vv[0].endsWith("+")?vv[0].replace("+","").replace("+",""):"")+"+"+"\t"+(v3.split(/\s+/)[1]?v3.replace(v3.split(/\s+/)[0],""):"")+"\t"+v2.replace(vv[0],"").replace("+","").replace("+","")]={}
 							delete json[v][v2]
 						}
-					}
-				byElements.value=JSON.stringify(json["vortos"]).replace(",","\n")	
-				
-				ress=json
-				return json
+					}	
+				var ress={}
+				for(var v in json["return"])
+					ress[v.split("\t")[0].replace("+","").replace("+","")]=v.substr(v.split("\t")[0].length).split(/\s+[-]/)
+				return ress
 			}
-			console.log(toJSON(wordsInfo))
-			console.log(onChange()["vortos"])
-			var onTest=function()
+			
+    		fonemsConfig=fonemsConfig.replace("    ","\t")
+    		var fonemsJson=toJSON(fonemsConfig)
+    		var fonems=onChange(fonemsJson)
+    		console.log(fonems)
+			
+    		wordsConfig=wordsConfig.replace("    ","\t")
+    		var wordsJson=toJSON(wordsConfig)
+    		var words=onChange(wordsJson)
+    		console.log(words)
+			
+			enterArea.oninput=function()
 			{
-				var test=testField.value
-				var res=""
-				for(var v in test.split(" "))
-					for(var v2 in ress["vortos"])
-						if(v2.startsWith("+"+test.split(" ")[v]+"+"))
-							res+="("+v2.replace(v2.split(/\s/)[0],"")+") "
-				for(var v=0;v<20;v++)
-				res=res.replace(/\s\s+/," ")
-				 console.log(res)
+				{
+				    var enteredFonems=enterArea.value.split("")
+					var fonemsResult=""
+					for(var v in enteredFonems)
+					{
+						fonemsResult+="\""+enteredFonems[v]+"\""
+						var ne=true
+						for(var v2 in fonems)
+						    for(var v3 in v2.split("/"))
+    							if(v2.split("/")[v3]==enteredFonems[v]&&ne)
+    							{
+    								fonemsResult+=""+fonems[v2].join("\t")
+    							    ne=false
+    							}
+    					fonemsResult+="\n"
+					}
+					fonemsInfoArea.value=fonemsResult
+				}
+				{
+				    var enteredWords=enterArea.value.split(/\s+/)
+					var wordsResult=""
+					for(var v in enteredWords)
+					{
+						wordsResult+="\""+enteredWords[v]+"\""
+						var ne=true
+						for(var v2 in words)
+						    for(var v3 in v2.split("/"))
+    							if(v2.split("/")[v3]==enteredWords[v]&&ne)
+    							{
+    								wordsResult+=""+words[v2].join("\t")
+    							    ne=false
+    							}
+    					wordsResult+="\n"
+					}
+					wordsInfoArea.value=wordsResult
+				}
 			}
-			testField.oninput=onTest
 		</script>
 	</body>
 </html>
