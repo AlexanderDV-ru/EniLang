@@ -1,153 +1,199 @@
 <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Мой язык</title>
+        </head>
 	<body>
 		<textarea style="width: 500px" id="enterArea"></textarea>
+		<input type="checkbox" id="fullDescriptionCheckbox">
+		<input type="number" id="languageInput" value="0">
 		<br>
 		<textarea style="width: 500px;height: 800px" id="fonemsDescriptionArea"></textarea>
 		<textarea style="width: 500px;height: 800px" id="wordsDescriptionArea"></textarea>
 		<script>
 var tabSym="\t"
 var fonemsFlags=`
-сг
-	сп  способ
-		шм  шумные
-			см  смычной
-			фр  фрикативный
-			дж  дрожащие
-				му  многоударные
-		сн  сонанты
-			дж  дрожащие
-				му  многоударные
-				оу  одноударные
-			нс  носовые
-			ап  аппроксиманты
-				бк  боковые
-				ск  скользящие
-		щл  щелкающие
-	гл  глухость
-		=зв  звонкие
-		=гх  глухие
-	мт  место
-		=гб  губные
-		=гб.гб  губно-губные
-		=гб.зб  губно-зубные
-		=бк  боковые
-		=пя  переднеязычные
-		=пя.зб  зубные
-		=пя.ал  альвеолярные
-		=пя.па  постальвеолярные
-		=пя.па.ла  палатоальвеолярные
-		=пя.па.рф  ретрофлексные
-		=пя.па.ап  альвеопалатальные
-		=пл палатальные
-		=пл.ч   чистые
-		=пл.л   лабио
-		=вл  велярные
-		=вл.ч   чистые
-		=вл.л   лабио
-		=ув  увулярные
-		=лг  ларингалы
-		=лг.фг  фарингальные
-		=лг.эг  эпиглоттальные
-		=лг.гт  глоттальные
-гл
-	вс  высота
-		=вх  Верхние	
-		=вх.нн  Ненапряжённые
-		=вх.ср  Средне
-		=ср  Средние
-		=нж  Нижние	
-		=нж.нн  Ненапряжённые
-		=нж.ср  Средне
-	дл  долгота	
-		=пр  Передние
-		=пр.нн  Ненапряжённые 
-		=сд  Средние
-		=зд  Задние	
-		=зд.нн  Ненапряжённые 
-	ол  огубленность
-		=нг  неогубленные
-		=ог  огубленные
+мк мягкость
+	=мг мягкие
+	=тв твердые
+гс гласность
+	=гл гласный
+	=сг согласный
+сп0  способ0
+	=шм  шумные
+	=сн  сонанты
+	=щл  щелкающие
+сп1  способ1
+	=см  смычной
+	=фр  фрикативный
+	=дж  дрожащие
+	=нс  носовые
+	=ап  аппроксиманты
+сп2  способ2
+	=бк  боковые
+	=ск  скользящие
+	=му  многоударные
+	=оу  одноударные
+гл  глухость
+	=зв  звонкие
+	=гх  глухие
+мс0 место0
+	=гб  губные
+	=бк  боковые
+	=пя  переднеязычные
+	=ув  увулярные
+	=лг  ларингалы
+	=вл  велярные
+мс1 место1
+	=гб  губные
+	=зб  зубные
+	=ал  альвеолярные
+	=па  постальвеолярные
+	=пл палатальные
+	=ч   чистые
+	=фг  фарингальные
+	=гт  глоттальные
+мс2 место2
+	=ла  палатоальвеолярные
+	=рф  ретрофлексные
+	=ап  альвеопалатальные
+	=эг  эпиглоттальные
+	
+вс  высота
+	=вх  Верхние	
+	=вн  Верхние-Ненапряжённые
+	=вс  Верхние-Средне
+	=ср  Средние
+	=нс  Нижние-Средне
+	=нн  Нижние-Ненапряжённые
+	=нж  Нижние	
+дл  долгота	
+	=пр  Передние
+	=пн  Передние-Ненапряжённые 
+	=сд  Средние
+	=зн  Задние-Ненапряжённые 
+	=зд  Задние	
+ол  огубленность
+	=нг  неогубленные
+	=ог  огубленные
+тн  тон
+	=вс высокий
+	=нз низкий
+	=вх восходящий
+	=нх нисходящий
+	=нв нисходяще-восходящий
+	=вн восходяще-нисходящий
+ур  ударение
+	=уд ударный
+	=нд неударный
+дт  длительность
+	=кр короткий
+	=ср средний
+	=дл длинный
 `
 var fonemsConfig=`
-мягкие_шумные_смычные
-	+P/П+	   -гх -мс=гб
-	+B/Б+	   -зв -мс=гб
-	+T/Т+	   -гх -мс=пя
-	+D/Д+	   -зв -мс=пя
-	+K/К+	   -гх -мс=вл
-	+G/Г+	   -зв -мс=вл
-мягкие_шумные_фрикативные
-	+F/Ф+	   -гх -мс=гб
-	+V/В+	   -зв -мс=гб
-	+S/С+	   -гх -мс=пя.ал
-	+Z/З+	   -зв -мс=пя.ал  
-	+X/Ш+	   -гх -мс=пя.па.па
-	+J/Ж+	   -зв -мс=пя.па.па  
-	+H/Х+	   -гх -мс=вл
-	+Q/Ъ+	   -зв -мс=вл
+мягкие_глухие_шумные_смычные
+	+P|П+	   -мс0=гб
+	+T|Т+	   -мс0=пя
+	+K|К+	   -мс0=вл  -1
+мягкие_звонкие_шумные_смычные
+	+B|Б+	   -мс0=гб
+	+D|Д+	   -мс0=пя
+	+G|Г+	   -мс0=вл  -1
+мягкие_глухие_шумные_фрикативные
+	+F|Ф+	   -мс0=гб  -2
+	+S|С+	   -мс0=пя -мс1=ал
+	+X|Ш+	   -мс0=пя -мс1=па -мс2=па
+	+H|Х+	   -мс0=вл  -1
+	+[ENGLISH_H]|[АНГЛИЙСКАЯ_Х]+	   -мс0=лг -мс1=гт
+мягкие_звонкие_шумные_фрикативные
+	+V|В+	   -мс0=гб  -2
+	+Z|З+	   -мс0=пя -мс1=ал  
+	+J|Ж+	   -мс0=пя -мс1=па -мс2=па  
+	+Q|Ъ+	   -мс0=вл  -1
 мягкие_скользящие
-	+Y/Й+
-	+W/Я+
+	+Y|Й+   -1
+	+W|Я+   -2  -мс0=вл -мс1=гб
 мягкие_сонанты
-	+M/М+   -сп=нс	-мс=гб
-	+N/Н+   -сп=нс	-мс=пя.ал 
-	+L/Л+   -сп=бк	-мс=пя.ал	
-	+R/Р+   -сп=др	-мс=пя.ал   
-	мягкие_скользящие  -сп=ск
+	+M|М+   -сп1=нс	-мс0=гб	-мс1=гб 
+	+N|Н+   -сп1=нс	-мс0=пя	-мс1=ал 
+	+L|Л+   -сп1=ап  -сп2=бк	-мс0=пя	-мс1=ал 
+	+R|Р+   -сп1=др  -сп2=му	-мс0=пя	-мс1=ал 
+	мягкие_скользящие  -сп1=ап  -сп2=ск
+мягкие_шумные_смычные
+	мягкие_глухие_шумные_смычные	-гл=гх
+	мягкие_звонкие_шумные_смычные	-гл=зв
+мягкие_шумные_фрикативные
+	мягкие_глухие_шумные_фрикативные	-гл=гх
+	мягкие_звонкие_шумные_фрикативные -гл=зв
+мягкие_шумные
+	мягкие_шумные_смычные   -сп1=см
+	мягкие_шумные_фрикативные   -сп1=фр
 мягкие_согласные
-	мягкие_шумные_смычные   -сп=шм.см
-	мягкие_шумные_фрикативные   -сп=шм.фр
-	мягкие_сонанты   -сп=сн
+	мягкие_шумные   -сп0=шм 
+	мягкие_сонанты  -сп0=сн
 мягкие_гласные
-	+A/А+
-	+O/О+
-	+E/Э+
-	+I/Ы+	 -1
-	+U/У+	 -2
+	+A|А+
+	+O|О+
+	+E|Э+
+	+I|Ы+	 -1
+	+U|У+	 -2
 мягкие_fonemos
-	мягкие_согласные   -сг
-	мягкие_гласные	 -гл
-твердые_шумные_смычные
-	+p/п+	   -гх -мс=гб
-	+b/б+	   -зв -мс=гб
-	+t/т+	   -гх -мс=пя
-	+d/д+	   -зв -мс=пя
-	+k/к+	   -гх -мс=вл
-	+g/г+	   -зв -мс=вл
-твердые_шумные_фрикативные
-	+f/ф+	   -гх -мс=гб
-	+v/в+	   -зв -мс=гб
-	+s/с+	   -гх -мс=пя.ал
-	+z/з+	   -зв -мс=пя.ал  
-	+x/ш+	   -гх -мс=пя.па.па
-	+j/ж+	   -зв -мс=пя.па.па  
-	+h/х+	   -гх -мс=вл
-	+q/ъ+	   -зв -мс=вл
+	мягкие_согласные   -гс=сг
+	мягкие_гласные	 -гс=гл
+	
+твердые_глухие_шумные_смычные
+	+p|п+	   -мс0=гб
+	+t|т+	   -мс0=пя
+	+k|к+	   -мс0=вл  -1
+твердые_звонкие_шумные_смычные
+	+b|б+	   -мс0=гб
+	+d|д+	   -мс0=пя
+	+g|г+	   -мс0=вл  -1
+твердые_глухие_шумные_фрикативные
+	+f|ф+	   -мс0=гб  -2
+	+s|с+	   -мс0=пя -мс1=ал
+	+x|ш+	   -мс0=пя -мс1=па -мс2=па
+	+h|х+	   -мс0=вл  -1
+	+[english_h]|[английская_х]+	   -мс0=лг -мс1=гт
+твердые_звонкие_шумные_фрикативные
+	+v|в+	   -мс0=гб  -2
+	+z|з+	   -мс0=пя -мс1=ал  
+	+j|ж+	   -мс0=пя -мс1=па -мс2=па  
+	+q|ъ+	   -мс0=вл  -1
 твердые_скользящие
-	+y/й+
-	+w/я+
+	+y|й+   -1
+	+w|я+   -2
 твердые_сонанты
-	+m/м+   -сп=нс	-мс=гб
-	+n/н+   -сп=нс	-мс=пя.ал 
-	+l/л+   -сп=бк	-мс=пя.ал	
-	+r/р+   -сп=др	-мс=пя.ал   
-	твердые_скользящие  -сп=ск
+	+m|м+   -сп1=нс	-мс0=гб	-мс1=гб 
+	+n|н+   -сп1=нс	-мс0=пя	-мс1=ал 
+	+l|л+   -сп1=ап  -сп2=бк	-мс0=пя	-мс1=ал 
+	+r|р+   -сп1=др  -сп2=му	-мс0=пя	-мс1=ал 
+	твердые_скользящие  -сп1=ап  -сп2=ск
+твердые_шумные_смычные
+	твердые_глухие_шумные_смычные	-гл=гх
+	твердые_звонкие_шумные_смычные	-гл=зв
+твердые_шумные_фрикативные
+	твердые_глухие_шумные_фрикативные	-гл=гх
+	твердые_звонкие_шумные_фрикативные -гл=зв
+твердые_шумные
+	твердые_шумные_смычные   -сп1=см
+	твердые_шумные_фрикативные   -сп1=фр
 твердые_согласные
-	твердые_шумные_смычные   -сп=шм.см
-	твердые_шумные_фрикативные   -сп=шм.фр
-	твердые_сонанты   -сп=сн
+	твердые_шумные   -сп0=шм 
+	твердые_сонанты  -сп0=сн
 твердые_гласные
-	+a/а+
-	+o/о+
-	+e/э+
-	+i/ы+	 -1
-	+u/у+	 -2
+	+a|а+
+	+o|о+
+	+e|э+
+	+i|ы+	 -1
+	+u|у+	 -2
 твердые_fonemos
-	твердые_согласные   -сг
-	твердые_гласные	 -гл
+	твердые_согласные   -гс=сг
+	твердые_гласные	 -гс=гл
 return
-	мягкие_fonemos  -мг
-	твердые_fonemos -тв
+	мягкие_fonemos  -мк=мг
+	твердые_fonemos -мк=тв
 `
 var wordsFlags=`
 g	gender
@@ -171,9 +217,13 @@ s   stage
 	=u  undefined
 	=p  perfect
 	=c  continuos
+f   face
+    =1  first
+    =2  second
+    =3  third
 tr  translate
 sp  part of speech
-	t	type
+sp.t	part of speech type
 `
 var wordsConfig=`
 spitxparto
@@ -189,8 +239,8 @@ vortparto
 	+prevort+	-tr=prefix
 	+postvort+	-tr=postfix
 lingo
-    +fonem+ -tr=phonem
-    +morphem+   -tr=morphem
+	+fonem+ -tr=phonem
+	+morphem+   -tr=morphem
 mIsko
 	+nom+	-tr=name
 	+fon+	-tr=sound
@@ -306,15 +356,15 @@ nono
 questions
 	+ki+	-tr=anyquestion
 pronono
-	+m+ -tr=i -g=u  -face=1
-	+v+ -tr=you -g=u  -face=2
-	+l+ -tr=it -g=u  -face=3
-	+fem+ -tr=i -g=f  -face=1
-	+fev+ -tr=you -g=f  -face=2
-	+fel+ -tr=it -g=f  -face=3
-	+mem+ -tr=i -g=m  -face=1
-	+mev+ -tr=you -g=m  -face=2
-	+mel+ -tr=it -g=m  -face=3
+	+m+ -tr=i -g=u  -f=1
+	+v+ -tr=you -g=u  -f=2
+	+l+ -tr=it -g=u  -f=3
+	+fem+ -tr=i -g=f  -f=1
+	+fev+ -tr=you -g=f  -f=2
+	+fel+ -tr=it -g=f  -f=3
+	+mem+ -tr=i -g=m  -f=1
+	+mev+ -tr=you -g=m  -f=2
+	+mel+ -tr=it -g=m  -f=3
 +O
 	pronono
 modal
@@ -406,6 +456,9 @@ ad
 	koloro
 	+rapid+ -tr=fast
 	+h+ -tr=funny
+	+kef+   -tr=main
+	+propaj+    -tr=sobstvennoe
+	+servis+    -tr=service
 	ad_non
 	verb_ad_non
 	nombro
@@ -496,51 +549,91 @@ return
 				return ress
 			}
 			
-    		fonemsConfig=fonemsConfig.replace("    ","\t")
-    		var fonemsJson=toJSON(fonemsConfig)
-    		var fonems=onChange(fonemsJson)
-    		console.log(fonems)
+			fonemsConfig=fonemsConfig.replace("	","\t")
+			var fonemsJson=toJSON(fonemsConfig)
+			var fonems=onChange(fonemsJson)
+			console.log(fonems)
 			
-    		wordsConfig=wordsConfig.replace("    ","\t")
-    		var wordsJson=toJSON(wordsConfig)
-    		var words=onChange(wordsJson)
-    		console.log(words)
+			wordsConfig=wordsConfig.replace("	","\t")
+			var wordsJson=toJSON(wordsConfig)
+			var words=onChange(wordsJson)
+			console.log(words)
 			
-			enterArea.oninput=function()
+			enterArea.oninput=fullDescriptionCheckbox.oninput=languageInput.oninput=function()
 			{
+			    var findFlag=function(flagConfig,flag, val)
+			    {
+			        var result=""
+			        for(var v in flagConfig.split("\n"))
+			            if(flagConfig.split("\n")[v].split(/\s+/)[0]==flag)
+			                result=flagConfig.split("\n")[v].substr(flag.length)
+			            else if(result&&val&&flagConfig.split("\n")[v].split(/\s+/)[1]=="="+val)
+			                return flagConfig.split("\n")[v].substr(flagConfig.split("\n")[v].indexOf(val)+val.length+1)
+			        return val&&result?val:(result?result:(val?val:flag))
+			    }
+			    var makeSingleDescription=function(flagConfig, arr)
+			    {
+			        var singleDescription=""
+			        for(var v in arr)
+			            if(fullDescriptionCheckbox.checked)
+			                singleDescription+=findFlag(flagConfig,arr[v].split("=")[0])+(arr[v].split("=")[1]?"="+findFlag(flagConfig,arr[v].split("=")[0],arr[v].split("=")[1]):"")+"\t"
+			            else singleDescription+=arr[v].split("=")[0]+(arr[v].split("=")[1]?"="+arr[v].split("=")[1]:"")+"\t"
+			        return singleDescription
+			    }
 				{
-				    var enteredFonems=enterArea.value.split("")
+					var enteredFonems=[]
+					var inbr=false,connect=false
+					for(var v in enterArea.value)
+					{
+					    //if(enterArea.value[v]!=":")
+    					    if(inbr||connect)
+    					        enteredFonems[enteredFonems.length-1]+=enterArea.value[v]
+    					    else enteredFonems[enteredFonems.length]=enterArea.value[v]
+					    if(enterArea.value[v]=="[")
+					        inbr=true
+					    if(enterArea.value[v]=="]")
+					        inbr=false
+					    //connect=enterArea.value[v]==":"
+					}
 					var fonemsResult=""
 					for(var v in enteredFonems)
 					{
 						fonemsResult+="\""+enteredFonems[v]+"\""
 						var ne=true
-						for(var v2 in fonems)
-						    for(var v3 in v2.split("/"))
-    							if(v2.split("/")[v3]==enteredFonems[v]&&ne)
-    							{
-    								fonemsResult+=""+fonems[v2].join("\t")
-    							    ne=false
-    							}
-    					fonemsResult+="\n"
+						for(var v22 in fonems)
+						if(v22.split("|")[languageInput.value])
+						{
+						    var v2=v22.split("|")[languageInput.value]
+							for(var v3 in v2.split("/"))
+								if(v2.split("/")[v3]==enteredFonems[v]&&ne)
+								{
+									fonemsResult+=""+makeSingleDescription(fonemsFlags,fonems[v22])
+									ne=false
+								}
+						}
+						fonemsResult+="\n"
 					}
 					fonemsDescriptionArea.value=fonemsResult
 				}
 				{
-				    var enteredWords=enterArea.value.split(/\s+/)
+					var enteredWords=enterArea.value.split(/\s+/)
 					var wordsResult=""
 					for(var v in enteredWords)
 					{
 						wordsResult+="\""+enteredWords[v]+"\""
 						var ne=true
-						for(var v2 in words)
-						    for(var v3 in v2.split("/"))
-    							if(v2.split("/")[v3]==enteredWords[v]&&ne)
-    							{
-    								wordsResult+=""+words[v2].join("\t")
-    							    ne=false
-    							}
-    					wordsResult+="\n"
+						for(var v22 in words)
+						if(v22.split("|")[languageInput.value])
+						{
+						    var v2=v22.split("|")[languageInput.value]
+							for(var v3 in v2.split("/"))
+								if(v2.split("/")[v3]==enteredWords[v]&&ne)
+								{
+									wordsResult+=""+makeSingleDescription(wordsFlags,words[v22])
+									ne=false
+								}
+						}
+						wordsResult+="\n"
 					}
 					wordsDescriptionArea.value=wordsResult
 				}
