@@ -1,8 +1,15 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Мой язык</title>
-        </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>EniLang - Language Assembler</title>
+
+	<style>
+		body {
+			background-color: #333;
+		}
+		</style>
+		</head>
 	<body>
 		<textarea style="width: 500px" id="enterArea"></textarea>
 		<input type="checkbox" id="fullDescriptionCheckbox">
@@ -10,6 +17,7 @@
 		<br>
 		<textarea style="width: 500px;height: 800px" id="fonemsDescriptionArea"></textarea>
 		<textarea style="width: 500px;height: 800px" id="wordsDescriptionArea"></textarea>
+		//Properties script
 		<script>
 var tabSym="\t"
 var fonemsFlags=`
@@ -499,6 +507,9 @@ vortos
 return
 	vortos
 `
+</script>
+//Main script
+<script>
 			var toJSON=function(text)
 			{
 				var json={}
