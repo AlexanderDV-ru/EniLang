@@ -1,0 +1,42 @@
+var hieroglifsConfig=`
+number
+	"0"
+		+b+
+	"1"
+		+s+
+	"2"
+		+d+
+	"3"
+		+f+
+	"4"
+		+g+
+	"5"
+		+h+
+	"6"
+		+j+
+	"7"
+		+k+
+	"8"
+		+l+
+	"9"
+		+p+
+	"@"
+		+r+
+	"$"
+		+t+
+mathsign
+	"="
+		+ekual+
+	"+"
+		+plus+
+	"-"
+		+minus+
+	"/"
+		+divid+
+	"*"
+		+multipl+
+	"^"
+		+pover+
+	"\\"
+		+root+
+`
